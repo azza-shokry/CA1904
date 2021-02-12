@@ -1,0 +1,162 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+int arr_sort[25],SIZE,i;
+void EnterArray(){
+  printf("How many elements are you want to enter : \n");
+  scanf("%d",&SIZE);
+  printf("Enter %d Elements for Sorting\n",SIZE);
+  for (i = 0; i <SIZE; i++)
+    scanf("%d", &arr_sort[i]);
+}
+
+void quick_sort(int f, int l) {
+  int  j, t, p = 0;
+
+  if (f < l) {
+    p = f;
+    i = f;
+    j = l;
+
+    while (i < j) {
+      while (arr_sort[i] <= arr_sort[p] && i < l)
+        i++;
+      while (arr_sort[j] > arr_sort[p])
+        j--;
+      if (i < j) {
+        t = arr_sort[i];
+        arr_sort[i] = arr_sort[j];
+        arr_sort[j] = t;
+      }
+    }
+
+    t = arr_sort[p];
+    arr_sort[p] = arr_sort[j];
+    arr_sort[j] = t;
+    quick_sort(f, j - 1);
+    quick_sort(j + 1, l);
+  }
+}
+
+void merge_sort(int i, int j) {
+  int m;
+
+  if (i < j) {
+    m = (i + j) / 2;
+    merge_sort(i, m);
+    merge_sort(m + 1, j);
+    merge_array(i, m, m + 1, j);
+  }
+}
+
+void merge_array(int a, int b, int c, int d) {
+  int t[50];
+  int i = a, j = c, k = 0;
+
+  while (i <= b && j <= d) {
+    if (arr_sort[i] < arr_sort[j])
+      t[k++] = arr_sort[i++];
+    else
+      t[k++] = arr_sort[j++];
+  }
+
+  while (i <= b)
+    t[k++] = arr_sort[i++];
+
+  while (j <= d)
+    t[k++] = arr_sort[j++];
+
+  for (i = a, j = 0; i <= d; i++, j++)
+    arr_sort[i] = t[j];
+}
+
+void insertion(int fn_arr[]) {
+    int i, j, a, t;
+    for (i = 1; i < SIZE; i++) {
+        t = fn_arr[i];
+        j = i - 1;
+
+        while (j >= 0 && fn_arr[j] > t) {
+            fn_arr[j + 1] = fn_arr[j];
+            j = j - 1;
+        }
+        fn_arr[j + 1] = t;
+    }
+}
+
+void viewSarray(){
+     printf("\nSorted Data :\n");
+     for (i = 0; i <SIZE; i++) {
+     printf("\t%d\n", arr_sort[i]);
+        }
+  getch();
+
+}
+
+void binary_search(int fn_arr[],int element) {
+   int f = 0, r = SIZE,mid;
+
+   while (f <= r) {
+	  mid = (f+r)/2;
+
+	  if (fn_arr[mid] == element) {
+         printf("\nSearch Element  : %d  : Found :  Position : %d.\n", element, mid+1);
+         break;
+	  }
+      else if (fn_arr[mid] < element)
+         f = mid + 1;
+      else
+         r = mid - 1;
+   }
+
+   if (f > r)
+      printf("\nSearch Element : %d  : Not Found \n", element);
+}
+
+
+int main()
+{
+    int a,b,element;
+
+    printf("Please choose the operation:-\n 1-Quick Sort\n 2-Insertion Sort\n 3-Merge Sort\n 4-Exit\n");
+    scanf("%d",&a);
+    switch(a){
+        case 1:
+            EnterArray();
+            quick_sort(0, SIZE - 1);
+            viewSarray();
+            break;
+        case 2:
+            EnterArray();
+            insertion(arr_sort);
+            viewSarray();
+            break;
+        case 3:
+            EnterArray();
+            merge_sort(0, SIZE - 1);
+            viewSarray();
+            break;
+        case 4:
+            exit(0);
+        default:
+            printf("ERROR\n");
+            }
+
+
+    printf("Do you want to search in your Array ?\n 1-YES.\n 2-NO.\n");
+    scanf("%d",&b);
+    switch(b){
+        case 1:
+            printf("Enter Element to Search : ");
+            scanf("%d", &element);
+            binary_search(arr_sort,element);
+            break;
+        case 2:
+            exit(0);
+            break;
+        default:
+            printf("ERROR");
+    }
+return 0;
+}
